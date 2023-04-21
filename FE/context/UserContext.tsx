@@ -1,12 +1,22 @@
-import { Dispatch, SetStateAction } from "react";
-import { createContext } from "react";
+import { createContext, useState } from "react";
 
 interface IUserContext {
-  user: string;
-  setUser: Dispatch<SetStateAction<string>>;
+  user: any;
+  loading: boolean;
+  setUser: (user: any) => void;
+  setLoading: (loading: boolean) => void;
 }
 
-const UserContext = createContext<IUserContext>({
-    user: "",
-    setUser: ()= {},
-})
+export const UserContext = createContext<IUserContext>({
+  user: {};
+  loading: true;
+  setUser: ()=> {}
+  setLoading: ()=> {}
+});
+
+export const UserContextProvider = (props) => {
+  const [currentUser, setCurrentUser] = useState({})
+  const [ loading, setLoading] = useState(true)
+
+  
+}
