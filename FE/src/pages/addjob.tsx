@@ -3,9 +3,11 @@ import styles from "../styles/addjob.module.css";
 import { useRouter } from "next/router";
 import { JobType } from "@/util/types";
 import axios from "axios";
+import { useUserContext } from "../../context/UserContext";
 
 export default function AddJob(): JSX.Element {
   const router = useRouter();
+  const { user } = useUserContext();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function submitHandler(event: any): void {
@@ -30,25 +32,31 @@ export default function AddJob(): JSX.Element {
   }
 
   return (
-    <div className={styles.add_job_page}>
-      <button className={styles.btn}>Back</button>
-      <form className={styles.job_form} onSubmit={submitHandler}>
-        <label>
-          <p>Job Title</p>
-          <input type="text" name="title" required />
-        </label>
+    <>
+      {user ? (
+        <div className={styles.add_job_page}>
+          <button className={styles.btn}>Back</button>
+          <form className={styles.job_form} onSubmit={submitHandler}>
+            <label>
+              <p>Job Title</p>
+              <input type="text" name="title" required />
+            </label>
 
-        <label>
-          <p>Job Description</p>
-          <textarea rows={5} name="description" required />
-        </label>
+            <label>
+              <p>Job Description</p>
+              <textarea rows={5} name="description" required />
+            </label>
 
-        <label>
-          <p> Payment</p>
-          <input type="number" name="payment" required />
-        </label>
-        <button className={styles.btn}>SUBMIT</button>
-      </form>
-    </div>
+            <label>
+              <p> Payment</p>
+              <input type="number" name="payment" required />
+            </label>
+            <button className={styles.btn}>SUBMIT</button>
+          </form>
+        </div>
+      ) : (
+        <div>pls login to post job</div>
+      )}
+    </>
   );
 }

@@ -1,22 +1,34 @@
-import { createContext, useState } from "react";
+import React, { createContext, useState, ReactNode, useContext } from "react";
 
-interface IUserContext {
+export interface IUserContext {
   user: any;
   loading: boolean;
   setUser: (user: any) => void;
   setLoading: (loading: boolean) => void;
 }
 
-export const UserContext = createContext<IUserContext>({
-  user: {};
-  loading: true;
-  setUser: ()=> {}
-  setLoading: ()=> {}
+export const UserContext = React.createContext<IUserContext>({
+  user: {},
+  loading: true,
+  setUser: () => {},
+  setLoading: () => {},
 });
 
-export const UserContextProvider = (props) => {
-  const [currentUser, setCurrentUser] = useState({})
-  const [ loading, setLoading] = useState(true)
-
-  
+interface UserProviderType {
+  children: ReactNode;
 }
+
+export const useUserContext = () => {
+  return useContext(UserContext);
+};
+
+export const UserContextProvider = ({ children }: UserProviderType) => {
+  const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  return (
+    <UserContext.Provider value={{ user, setUser, loading, setLoading }}>
+      {children}
+    </UserContext.Provider>
+  );
+};

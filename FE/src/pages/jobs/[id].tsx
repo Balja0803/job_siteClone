@@ -1,20 +1,37 @@
 import { JobType } from "@/util/types";
 import { GetStaticProps, GetStaticPropsContext } from "next";
 import Style from "../../styles/JobCard.module.css";
+import { useUserContext } from "../../../context/UserContext";
 
 export default function Job({ data: job }: { data: JobType }): JSX.Element {
+  const { user, setUser } = useUserContext();
   console.log("jobPage:", job);
+
+  function logoutHandler() {
+    setUser(false);
+  }
+
   return (
-    <div className={Style.wrap}>
-      <div className={Style.jobCard}>
-        <h1 className={Style.cardTitle}>{job.title}</h1>
-        <p className={Style.cardDisc}>{job.description}</p>
-        <span className={Style.cardmoney}>{job.payment}$</span>
-        <p className={Style.contractType}>{job.contractType}</p>
-      </div>
-      <button onClick={() => console.log("clicked")} className={Style.button}>
-        Apply
-      </button>
+    <div>
+      {user ? (
+        <div className={Style.wrap}>
+          <div className={Style.jobCard}>
+            <h1 className={Style.cardTitle}>{job.title}</h1>
+            <p className={Style.cardDisc}>{job.description}</p>
+            <span className={Style.cardmoney}>{job.payment}$</span>
+            <p className={Style.contractType}>{job.contractType}</p>
+          </div>
+          <button
+            onClick={() => console.log("clicked")}
+            className={Style.button}
+          >
+            Apply
+          </button>
+          <button onClick={logoutHandler}>logout</button>
+        </div>
+      ) : (
+        <div>Please login to see content</div>
+      )}
     </div>
   );
 }

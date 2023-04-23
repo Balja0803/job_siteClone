@@ -4,9 +4,11 @@ import { UserType } from "@/util/types";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { useUserContext } from "../../../context/UserContext";
 
 export default function Login(): JSX.Element {
   const router = useRouter();
+  const { setUser } = useUserContext();
 
   function submitHandler(event: any): void {
     event.preventDefault();
@@ -19,9 +21,11 @@ export default function Login(): JSX.Element {
     };
     console.log("user login", userLogin);
     axios
-      .post(`http://localhost:8080/user/login`, userLogin)
+      .post(`http://localhost:5000/user/login`, userLogin)
       .then((res) => {
-        if (res.data.success) {
+        console.log("response", res.status);
+        if (res.status === 201) {
+          setUser(res.data.firstName);
           router.push("/success");
         } else {
           console.log("fail");
