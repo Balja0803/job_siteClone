@@ -3,11 +3,7 @@ import styles from "../styles/header.module.css";
 import Link from "next/link";
 
 export default function Header(): JSX.Element {
-  const { user, setUser } = useUserContext();
-
-  function handleLogout() {
-    setUser(false);
-  }
+  const { user, handleLogout } = useUserContext();
 
   return (
     <div className={styles.header}>
@@ -18,19 +14,16 @@ export default function Header(): JSX.Element {
       <Link href={`/addjob`}>
         <div className={styles.post}>Post</div>
       </Link>
-      {/* {user ? (
+      {user ? (
         <div>
-          <div>Hi! {user}</div>
+          <div>Hi! {user.firstName}</div>
           <button onClick={handleLogout}>Log out</button>
         </div>
       ) : (
         <Link href={"/user/login"}>
           <div>LogIn</div>
         </Link>
-      )} */}
-      <Link href={"/user/login"}>
-        <div>LogIn</div>
-      </Link>
+      )}
     </div>
   );
 }

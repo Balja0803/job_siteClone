@@ -4,12 +4,8 @@ import Style from "../../styles/JobCard.module.css";
 import { useUserContext } from "../../../context/UserContext";
 
 export default function Job({ data: job }: { data: JobType }): JSX.Element {
-  const { user, setUser } = useUserContext();
+  const { user } = useUserContext();
   console.log("jobPage:", job);
-
-  function logoutHandler() {
-    setUser(false);
-  }
 
   return (
     <div>
@@ -27,7 +23,6 @@ export default function Job({ data: job }: { data: JobType }): JSX.Element {
           >
             Apply
           </button>
-          <button onClick={logoutHandler}>logout</button>
         </div>
       ) : (
         <div>Please login to see content</div>
