@@ -31,8 +31,8 @@ export class UserController {
 
   // @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() UserDto: UserDto) {
-    return this.userService.signIn(UserDto.email, UserDto.password);
+  signIn(@Body() body: UserDto) {
+    return this.userService.signIn(body.email, body.password);
   }
 
   @Get('/:id')
