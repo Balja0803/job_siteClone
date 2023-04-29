@@ -1,3 +1,80 @@
 .wrapper {
-  border: 1px solid black;
+  position: absolute;
+  margin: 0 auto;
+  height: 80%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  /* margin-top: 50px; */
+  /* height: 100vh; */
+  /* max-width: 100%; */
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  gap: 10px;
+  margin-left: 50px;
+  color: #5c6bc0;
+}
+
+.nowTitle {
+  color: #5c6bc0;
+}
+
+.inputs {
+  margin: 5px 0px 25px 0px;
+  border: none;
+  padding: 8px;
+  border-radius: 5px;
+  border: solid 1px #5c6bc0;
+  width: 80%;
+}
+
+.phoneNumber {
+  display: flex;
+  width: 147px;
+  margin-left: 120px;
+}
+
+.gender {
+  display: flex;
+  margin-left: 70px;
+  margin-bottom: 25px;
+  gap: 105px;
+}
+
+.gender p {
+  color: #5c6bc0;
+}
+
+.gender .option {
+  padding: 8px;
+  border-radius: 5px;
+  border: solid 1px #5c6bc0;
+  width: 40%;
+}
+
+.submit {
+  display: flex;
+  flex-direction: column;
+}
+
+.submitBtn {
+  display: flex;
+  width: 147px;
+  margin-left: 120px;
+}
+
+.submitBtn {
+  justify-content: center;
+  background-color: #5c6bc0;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
 }

@@ -24,7 +24,7 @@ export default function Register(): JSX.Element {
     console.log("new User", data);
 
     axios
-      .post("http://localhost:5000/user/register", data)
+      .post("http://localhost:8008/user/add", data)
       .then((res) => {
         if (res.data.success) {
           router.push("/success");
@@ -36,25 +36,41 @@ export default function Register(): JSX.Element {
   return (
     <div className={styles.wrapper}>
       <form onSubmit={(e) => submitHandler(e)}>
+        <h1>
+          Job<span className={styles.nowTitle}>Site</span>
+        </h1>
         <label>
-          <p>First name:</p>
-          <input id="firstName" name="firstName" type="text" />
+          <p className={styles.titles}>First name</p>
+          <input
+            className={styles.inputs}
+            id="firstName"
+            name="firstName"
+            type="text"
+          />
         </label>
         <label>
-          <p>Last name:</p>
-          <input name="lastName" type="text" />
+          <p className={styles.titles}>Last name</p>
+          <input className={styles.inputs} name="lastName" type="text" />
         </label>
         <label>
-          <p>Email:</p>
-          <input name="email" type="text" />
+          <p className={styles.titles}>Email</p>
+          <input className={styles.inputs} name="email" type="text" />
         </label>
+
         <label>
-          <p>Password:</p>
-          <input name="password" type="password" />
+          <p className={styles.titles}>Password</p>
+          <input className={styles.inputs} name="password" type="password" />
         </label>
-        <label>
-          <p>gender:</p>
-          <select name="gender">
+
+        <div className={styles.submit}>
+          <label>
+            <p className={styles.titles}>Phone number</p>
+            <input type="number" name="phoneNumber" className={styles.inputs} />
+          </label>
+        </div>
+        <label className={styles.gender}>
+          <p>Gender</p>
+          <select className={styles.option} name="gender">
             <option defaultValue={"select"} disabled>
               select
             </option>
@@ -63,11 +79,9 @@ export default function Register(): JSX.Element {
             <option>other</option>
           </select>
         </label>
-        <label>
-          <p>Phone number:</p>
-          <input type="number" name="phoneNumber" />
-        </label>
-        <button type="submit">Submit</button>
+        <button type="submit" className={styles.submitBtn}>
+          Submit
+        </button>
       </form>
     </div>
   );

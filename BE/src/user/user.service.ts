@@ -7,10 +7,9 @@ import { UserDto } from './user.dto';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel('users') private userModel: Model<User>,
+    @InjectModel('User') private userModel: Model<User>,
     @InjectConnection() private connection: Connection,
   ) {}
-
   async addUser(createUserDto: UserDto): Promise<User> {
     const createdUser = new this.userModel(createUserDto);
     return createdUser.save();
@@ -27,7 +26,7 @@ export class UserService {
     return result;
   }
 
-  async signIn(email: string, pass: string): Promise<any> {
+  async signIn(email: string, pass: string): Promise<User> {
     const user = await this.userModel.findOne({ email });
     if (user.password === pass) {
       return user;

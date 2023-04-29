@@ -17,6 +17,7 @@ export class JobController {
     console.log('request body ', body);
     return this.jobService.addJob(body);
   }
+
   @Get('job_id')
   getStaticId(): Promise<Job[]> {
     console.log('generating static paths');
@@ -26,5 +27,10 @@ export class JobController {
   @Get('/:id')
   getJob(@Param('id') id: string) {
     return this.jobService.findJob(id);
+  }
+
+  @Get('posted/:id')
+  getPostedJobsByUserId(@Param('id') userId: string): Promise<Job[]> {
+    return this.jobService.getPostedJobsByUserId(userId);
   }
 }
