@@ -1,36 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import { UserType } from "@/util/types";
-// import { useRouter } from "next/router";
-// import axios from "axios";
+import { useRouter } from "next/router";
+import axios from "axios";
 import Link from "next/link";
 import styles from "../../styles/Login.module.css";
 import { useUserContext } from "../../context/UserContext";
 
 export default function Login(): JSX.Element {
+  const router = useRouter();
   const { submitHandler } = useUserContext();
-  // const router = useRouter();
 
-  // function submitHandler(event: any): void {
-  //   event.preventDefault();
-
-  //   const target = event.currentTarget.elements;
-
-  //   const userLogin: UserType = {
-  //     email: target.email.value,
-  //     password: target.password.value,
-  //   };
-  //   console.log("user login", userLogin);
-  //   axios
-  //     .post(`http://localhost:8080/user/login`, userLogin)
-  //     .then((res) => {
-  //       if (res.data.success) {
-  //         router.push("/success");
-  //       } else {
-  //         console.log("fail");
-  //       }
-  //     })
-  //     .catch((err) => console.log(err));
-  // }
+  function googleLogin() {
+    axios
+      .get("http://localhost:8008/google-login")
+      .then((res) => router.push(res.data));
+  }
 
   return (
     <div className={styles.logInFrom}>
@@ -74,6 +58,13 @@ export default function Login(): JSX.Element {
                   className={styles.register}
                 />
               </Link>
+              <button
+                type="button"
+                className={styles.login}
+                onClick={googleLogin}
+              >
+                Google login
+              </button>
             </div>
           </div>
         </form>

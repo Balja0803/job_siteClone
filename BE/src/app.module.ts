@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { jobModule } from './job/job.module';
 import { applicationModule } from './application/application.module';
+import { GoogleLoginModule } from './googleLogin/googleLogin.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { applicationModule } from './application/application.module';
     UserModule,
     jobModule,
     applicationModule,
+    GoogleLoginModule,
   ],
   controllers: [AppController],
   providers: [AppService],
