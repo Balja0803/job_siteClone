@@ -1,45 +1,72 @@
 import { JobType } from "@/util/types";
 import { GetStaticProps, GetStaticPropsContext } from "next";
-import Style from "../../styles/JobCard.module.css";
 import { useUserContext } from "../../context/UserContext";
 import axios from "axios";
+import { useState, useEffect } from "react";
+import SuccessModal from "@/components/SuccessModal";
+import { useRouter } from "next/router";
 
 export default function Job({ data: job }: { data: JobType }): JSX.Element {
-  const { user } = useUserContext();
-  console.log("jobPage:", job);
+  const { currentUser } = useUserContext();
+  const [isApplied, setIsApplied] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!currentUser) {
+      router.push("/login");
+    }
+  }, [currentUser, router]);
 
   function handleApply() {
     console.log("Job Id", job._id);
-    console.log("User id", user?._id);
+    console.log("User id", currentUser?._id);
 
-    const newApply = { jobId: job._id, userId: user?._id };
+    const newApply = { jobId: job._id, userId: currentUser?._id };
 
     axios
       .post("http://localhost:8008/application/add", newApply)
-      .then((res) => console.log(res));
+      .then((res) => {
+        console.log(res.data);
+        if (res.data) {
+          setShowSuccessModal(true);
+        }
+      })
+      .catch(() => setIsApplied(true));
   }
+
   return (
-    <div>
-      {user ? (
-        <div className={Style.wrap}>
-          <div className={Style.jobCard}>
-            <h1 className={Style.cardTitle}>{job.title}</h1>
-            <p className={Style.cardDisc}>{job.description}</p>
-            <span className={Style.cardmoney}>{job.payment}$</span>
-            <p className={Style.contractType}>{job.contractType}</p>
+    <>
+      {currentUser && (
+        <div className="jobpage flex flex-col md:flex-row-reverse gap-4 container px-4 py-2">
+          <div className="jobpage-employer w-full md:w-1/4 md:h-[260px] p-4">
+            <h2 className="jobpage-employer-title">Employer Info</h2>
           </div>
-          <button
-            disabled={user._id === job.postedBy}
-            onClick={handleApply}
-            className={Style.button}
-          >
-            Apply
-          </button>
+          <div className="jobpage-jobdetails w-full min-h-[600px] md:w-3/4 p-4">
+            <div>
+              <h1 className="jobpage-title">{job.title}</h1>
+              <p className="jobpage-description">{job.description}</p>
+              <p className="jobpage-contract">{job.contractType}</p>
+              <p className="jobpage-contract">{job.wage}</p>
+              <p className="jobpage-contract">{job.category}</p>
+              <p className="jobpage-contract">{job.requirement}</p>
+              <p className="jobpage-contract">{job.location}</p>
+            </div>
+            <button
+              disabled={currentUser._id === job.postedBy}
+              onClick={handleApply}
+              className={`w-full ${
+                isApplied ? "text-black bg-gray-400 rounded-lg" : "btn-style"
+              }`}
+            >
+              {isApplied ? "Applied" : "Apply"}
+            </button>
+          </div>
+
+          {showSuccessModal && <SuccessModal setModal={setShowSuccessModal} />}
         </div>
-      ) : (
-        <div>Please login to see content</div>
       )}
-    </div>
+    </>
   );
 }
 

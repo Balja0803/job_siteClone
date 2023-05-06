@@ -23,7 +23,8 @@ export class GoogleLoginController {
 
   @Get('google-login')
   googleLogin() {
-    console.log('google login request');
+    console.log('google login Request');
+
     const stringifiedParams = queryString.stringify({
       client_id: process.env.CLIENT_ID,
       redirect_uri: `http://localhost:${process.env.PORT}/google/callback`,
@@ -42,7 +43,6 @@ export class GoogleLoginController {
   async verifyGoogle(@Req() req: Request, @Res() res: Response) {
     console.log('google callback');
     const { code } = req.query;
-    console.log('code cb', code);
 
     if (!code)
       throw new HttpException('Bad Request code', HttpStatus.BAD_REQUEST);
@@ -64,13 +64,19 @@ export class GoogleLoginController {
         lastName: profile.family_name,
         password: null,
         gender: null,
-        skill: [],
-        phoneNumber: 0,
+        skills: [],
+        phoneNumber: null,
+        image: profile.picture,
       };
       user = await this.userService.createUser(userInput);
     }
 
-    const payload = { name: user.firstName, email: user.email };
+    const payload = {
+      name: user.firstName,
+      email: user.email,
+      _id: user._id,
+      image: user.image,
+    };
     const token = await this.jwtService.signAsync(payload);
 
     res

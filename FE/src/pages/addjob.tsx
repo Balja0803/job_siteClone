@@ -1,13 +1,20 @@
-import React from "react";
-import styles from "../styles/addjob.module.css";
-import { useRouter } from "next/router";
-import { JobType } from "@/util/types";
 import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { JobType } from "@/util/types";
 import { useUserContext } from "../context/UserContext";
+import SuccessModal from "@/components/SuccessModal";
+import { useRouter } from "next/router";
 
 export default function AddJob(): JSX.Element {
-  const { user } = useUserContext();
+  const { currentUser } = useUserContext();
+  const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!currentUser) {
+      router.push("/login");
+    }
+  }, [currentUser, router]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function submitHandler(event: any): void {
@@ -16,17 +23,21 @@ export default function AddJob(): JSX.Element {
     const target = event.currentTarget.elements;
 
     const newJob: JobType = {
-      postedBy: user?._id,
+      postedBy: currentUser?._id,
       title: target.title.value,
       description: target.description.value,
-      payment: target.payment.value,
+      wage: Number(target.wage.value),
+      requirement: target.requirement.value,
+      location: target.location.value,
+      // contractType: target.contractType.value,
     };
-    console.log("add new job working", newJob);
+    console.log("new job", newJob);
     axios
       .post("http://localhost:8008/job/add", newJob)
       .then((res) => {
+        console.log(res);
         if (res.data.success) {
-          router.push("/success");
+          setShowSuccessModal(true);
         }
       })
       .catch((err) => console.log(err));
@@ -34,29 +45,81 @@ export default function AddJob(): JSX.Element {
 
   return (
     <>
-      {user ? (
-        <div className={styles.add_job_page}>
-          <button className={styles.btn}>Back</button>
-          <form className={styles.job_form} onSubmit={submitHandler}>
-            <label>
-              <p>Job Title</p>
-              <input type="text" name="title" required />
-            </label>
+      {currentUser ? (
+        <div className="add_job_page">
+          <form className="job_form" onSubmit={submitHandler}>
+            <div className="inputs_field">
+              <label className="inputs_left_form">
+                <p>Job Title</p>
+                <input
+                  className="input"
+                  type="text"
+                  name="title"
+                  placeholder="Title"
+                  required
+                />
+              </label>
 
-            <label>
-              <p>Job Description</p>
-              <textarea rows={5} name="description" required />
-            </label>
+              <label className="inputs_right_form">
+                <p>Wage</p>
+                <input
+                  className="input"
+                  type="number"
+                  name="wage"
+                  placeholder="Wage"
+                  required
+                />
+              </label>
+            </div>
+            <div className="inputs_field">
+              <label className="inputs_left_form">
+                <p>Job Description</p>
+                <textarea
+                  className="input"
+                  rows={5}
+                  name="description"
+                  placeholder="Job Description"
+                  required
+                />
+              </label>
 
-            <label>
-              <p> Payment</p>
-              <input type="number" name="payment" required />
-            </label>
-            <button className={styles.btn}>SUBMIT</button>
+              <label className="inputs_right_form">
+                <p> Requirement</p>
+                <textarea
+                  className="input"
+                  rows={5}
+                  name="requirement"
+                  placeholder="Requirement"
+                  required
+                />
+              </label>
+            </div>
+            <div className="inputs_field">
+              <label className="inputs_left_form">
+                <p> Job Category</p>
+                <select className="input" name="category" required>
+                  <option value="text">developer</option>
+                  <option value="text">design</option>
+                </select>
+              </label>
+              <label className="inputs_right_form">
+                <p> Job Location</p>
+                <input
+                  className="input"
+                  type="Address Type"
+                  name="location"
+                  placeholder="Location"
+                  required
+                />
+              </label>
+            </div>
+
+            <button className="btn">SUBMIT</button>
           </form>
+          {showSuccessModal && <SuccessModal setModal={setShowSuccessModal} />}
         </div>
       ) : (
-        <div>anon pls... login to post job</div>
+        <div>login to post job</div>
       )}
     </>
   );

@@ -1,68 +1,81 @@
-
-import {useState} from "react";
-import {useUserContext} from "../context/UserContext";
-
-import styles from "../styles/header.module.css";
 import Link from "next/link";
+import React, { useState } from "react";
+import { useUserContext } from "@/context/UserContext";
+import "primeicons/primeicons.css";
+import { Sidebar } from "primereact/sidebar";
+import { useRouter } from "next/router";
 
 export default function Header(): JSX.Element {
-  const { user, handleLogout } = useUserContext();
-  const [offanvas, setOffcanvas] = useState(false);
-  // const [visible, setVisible] = useState(false)
+  const { currentUser, handleLogout } = useUserContext();
+  const [visible, setVisible] = useState<boolean>(false);
+  const router = useRouter();
 
   return (
-    <div className={styles.header}>
-      <Link href={`/`}>
-        <div className={styles.logo}>Logo</div>
+    <div className="header center-element w-full h-[46px] md:h-[54px] container mx-auto">
+      <Link href={`/`} className="header-logo">
+        <div>Logo</div>
       </Link>
-      <div className={styles.menu}>
-        {offanvas ? (
-          <div id="mySidenav" className="sidenav">
-            <div className={styles.filters}>
-              {user ? (
-                <div>
-                  <div>Hi! {user.firstName}</div>
-                  <button onClick={handleLogout}>Log out</button>
-                </div>
-              ) : (
-                <Link href={"/user/login"}>
-                  <div>LogIn</div>
-                </Link>
-              )}
-              <Link
-                href={`/user/appliedjobs`}
-                onClick={() => setOffcanvas(false)}
-              >
-                <div>Applied jobs</div>
-              </Link>
-              <Link
-                href={`/user/postedjobs`}
-                onClick={() => setOffcanvas(false)}
-              >
-                <div>Posted jobs</div>
-              </Link>
-            </div>
+      <div className="center-element gap-2">
+        {!currentUser && (
+          <Link
+            href="/login"
+            className="header-login-btn hidden sm:block sm:w-[60px]"
+          >
+            <div>Log In</div>
+          </Link>
+        )}
+        <Link href={`/addjob`} className="btn-style">
+          <span>Post a Job</span>
+        </Link>
+        {currentUser && (
+          <picture className="w-[40px]">
+            <img
+              src={currentUser.image}
+              alt="user"
+              onClick={() => setVisible(true)}
+            />
+          </picture>
+        )}
+      </div>
+
+      <Sidebar
+        visible={visible}
+        position="right"
+        onHide={() => setVisible(false)}
+      >
+        <Link
+          href={`/user/${currentUser?._id}/appliedjobs`}
+          onClick={() => setVisible(false)}
+        >
+          <div className="sidebar-options">Applied jobs</div>
+        </Link>
+        <Link
+          href={`../user/${currentUser?._id}/postedjobs`}
+          onClick={() => setVisible(false)}
+        >
+          <div className="sidebar-options">Posted jobs</div>
+        </Link>
+        {currentUser && (
+          <Link
+            href={`/user/${currentUser._id}`}
+            onClick={() => setVisible(false)}
+          >
+            <div className="sidebar-options">User Profile / Settings</div>
+          </Link>
+        )}
+        {currentUser ? (
+          <div
+            onClick={() => {
+              handleLogout();
+              setVisible(false);
+              router.push("/");
+            }}
+            className="sidebar-options"
+          >
+            Logout
           </div>
         ) : null}
-      </div>
-
-      <Link href={`/addjob`}>
-        <span className={styles.post}>Post a Job</span>
-      </Link>
-
-      <div id="mainBtn">
-        <span
-          className={`${offanvas ? styles.menuBtnHidden : styles.menuBtn} `}
-          onClick={() => {
-            setOffcanvas(true);
-          }}
-        >
-          &#9776;
-        </span>
-        <a className={styles.closebtn} onClick={() => setOffcanvas(false)}>
-          &times;
-        </a>
-      </div>
+      </Sidebar>
     </div>
   );
 }

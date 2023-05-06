@@ -1,24 +1,20 @@
-.wrap {
-  position: absolute;
-  margin: 0 auto;
-  height: 80%;
-  width: 100%;
+.google {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  border: 1px solid #889397;
+  border-radius: 6px;
+  gap: 10px;
+  justify-content: center;
+  color: #5c6c75;
+}
+
+.orWith {
+  text-align: center;
+  color: #5c6c75;
 }
 
 .titleNow {
   color: #5c6bc0;
-}
-
-/* .wrapper {
-  padding: 40px;
-} */
-
-.wrapFrom {
-  text-align: center;
 }
 
 .title {

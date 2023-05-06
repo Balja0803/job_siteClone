@@ -1,11 +1,14 @@
 export type JobType = {
-  postedBy: string | undefined;
+  postedBy?: undefined | string;
   _id?: string;
   title: string;
   description: string;
-  payment: number;
+  wage: number;
   createdDate?: Date;
   contractType?: string;
+  category?: string;
+  requirement: string;
+  location: string;
 };
 
 export type UserType = {
@@ -16,4 +19,10 @@ export type UserType = {
   email: string;
   gender?: string;
   phoneNumber?: number;
+  image?: string;
+  skills?: [string];
+};
+
+export type AppliedJobsType = {
+  state: string;
 };
